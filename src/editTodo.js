@@ -1,13 +1,12 @@
 import { local } from ".";
-import { saveObject } from "./save";
 import { format } from "date-fns";
+import { saveObject } from "./save";
 
-function addTodo(a, b) {
-  const project = b;
-  const card = a;
 
-  console.log(card);
-  console.log(project);
+function EditTodo(task, todo) {
+    while(task.firstChild){
+        task.removeChild(task.firstChild)
+    }
   const form = document.createElement("form");
 
   const title = document.createElement("label");
@@ -18,6 +17,9 @@ function addTodo(a, b) {
   inputTitle.setAttribute("type", "text");
   inputTitle.setAttribute("name", "projectTitle");
   inputTitle.setAttribute("id", "projectTitle");
+  inputTitle.setAttribute("value", todo.title)
+  inputTitle.focus()
+
 
   title.appendChild(inputTitle);
 
@@ -29,6 +31,7 @@ function addTodo(a, b) {
   inputDescription.setAttribute("type", "text");
   inputDescription.setAttribute("name", "projectDescription");
   inputDescription.setAttribute("id", "projectDescription");
+  inputDescription.setAttribute("value", todo.description)
 
   description.appendChild(inputDescription);
 
@@ -40,7 +43,7 @@ function addTodo(a, b) {
   inputDuedate.setAttribute("type", "datetime-local");
   inputDuedate.setAttribute("name", "dueDate");
   inputDuedate.setAttribute("id", "dueDate");
-  inputDuedate.setAttribute("value", format(new Date(), 'yyyy-MM-dd\'T\'HH:mm'))
+  inputDuedate.setAttribute("value", format(new Date(todo.dueDate), 'yyyy-MM-dd\'T\'HH:mm'))
 
 
   dueDate.appendChild(inputDuedate);
@@ -54,13 +57,16 @@ function addTodo(a, b) {
   inputPiority.setAttribute("id", "piority");
 
 
-
-  for (let i = 4; i > 0; i--) {
+  for (let i = 1; i < 5; i++) {
     const option = document.createElement("option");
     option.setAttribute("value", i);
     option.textContent = i;
     inputPiority.appendChild(option);
+    if(option.textContent === todo.piority){
+      option.setAttribute("selected", "selected")
+    }
   }
+
 
   piority.appendChild(inputPiority);
 
@@ -69,15 +75,15 @@ function addTodo(a, b) {
   submitButton.textContent = "Save";
   submitButton.classList.add("save");
   submitButton.addEventListener("click", () => {
-    project.createTodo(
-      inputTitle.value,
-      inputDescription.value,
-      format(new Date(inputDuedate.value), "Pp"),
-      inputPiority.value
-    );
-    saveObject(local);
-    local.display();
-    card.removeChild(form);
+    todo.title = inputTitle.value
+    todo.description = inputDescription.value
+    todo.dueDate = inputDuedate.value
+    todo.piority = inputPiority.value
+    local.display()
+    saveObject(local)
+
+    
+    task.removeChild(form);
   });
 
   const closeButton = document.createElement("span");
@@ -85,7 +91,8 @@ function addTodo(a, b) {
   closeButton.setAttribute("id", "remove");
   closeButton.textContent = "X";
   closeButton.addEventListener("click", () => {
-    card.removeChild(form);
+    task.removeChild(form);
+    local.display()
   });
 
   form.appendChild(closeButton);
@@ -95,7 +102,7 @@ function addTodo(a, b) {
   form.appendChild(piority);
   form.appendChild(submitButton);
 
-  card.appendChild(form);
+  task.appendChild(form);
 }
 
-export { addTodo };
+export {EditTodo}

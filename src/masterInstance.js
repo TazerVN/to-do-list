@@ -1,62 +1,73 @@
-import { displayContentCard } from "./displaycontent"
-import { displaySidebar } from "./displaysidebar"
-import { addTaskButton } from "./addTaskButton"
-import { saveObject } from "./save"
-import { project } from "./createprojects"
+import { displayContentCard } from "./displaycontent";
+import { displaySidebar } from "./displaysidebar";
+import { addTaskButton } from "./addTaskButton";
+import { saveObject } from "./save";
+import { project } from "./createprojects";
 
-const content = document.querySelector(".content")
-const sidebar = document.querySelector(".projectlist")
+const content = document.querySelector(".content");
+const sidebar = document.querySelector(".projectlist");
 
-class newInstance{
-    constructor(name){
-        this.name = name
-        this.projectList = []
+class newInstance {
+  constructor(name) {
+    this.name = name;
+    this.projectList = [];
+    this.theme = "light";
+  }
+
+  addProject(project) {
+    this.projectList.push(project);
+  }
+
+  removeProject(project) {
+    this.projectList.splice(this.projectList.indexOf(project), 1);
+    project.removeContent();
+    this.saveInstance();
+    this.display();
+  }
+
+  saveInstance() {
+    saveObject(this);
+  }
+
+  display() {
+    const instanceTitle = document.createElement("div");
+    instanceTitle.classList.add("title");
+    instanceTitle.textContent = this.name;
+
+    while (content.firstChild) {
+      content.removeChild(content.firstChild);
     }
 
-    addProject(project){
-        this.projectList.push(project)
-        saveObject(this)
+    while (sidebar.firstChild) {
+      sidebar.removeChild(sidebar.firstChild);
     }
 
-    display(){
-        const instanceTitle = document.createElement("div")
-        instanceTitle.classList.add("title")
-        instanceTitle.textContent = this.name
-        
-        
-        while (content.firstChild){
-            content.removeChild(content.firstChild)
-        }
+    content.appendChild(instanceTitle);
 
-        while (sidebar.firstChild){
-            sidebar.removeChild(sidebar.firstChild)
-        }
-        
+    this.projectList.forEach((project) => {
+      project.contentcard = new displayContentCard(project);
+      project.sidebar = new displaySidebar(project);
+      project.populateContent();
+    });
 
-        content.appendChild(instanceTitle)
+    addTaskButton();
+  }
 
-        this.projectList.forEach((project)=>{
-            project.populateContent()
-            console.log(project)
-        })
-        
-        addTaskButton()
-    }
+  toJSON() {
+    return {
+      name: this.name,
+      projectList: this.projectList.map((p) => p.toJSON()),
+      __class__: "Instance",
+    };
+  }
 
-    toJSON(){
-        return {
-            name: this.name,
-            projectList: this.projectList.map(p => p.toJSON()),
-            __class__: "Instance",
-        };
-    }
-
-    static fromJSON(data){
-        const Instance = new newInstance(data.name);
-        Instance.projectList = data.projectList.map(projectData => project.fromJSON(projectData))
-        return Instance
-    }
-
+  static fromJSON(data) {
+    const Instance = new newInstance(data.name);
+    Instance.projectList = data.projectList.map((projectData) =>
+      project.fromJSON(projectData)
+    );
+    return Instance;
+  }
 }
 
-export {newInstance}
+export { newInstance };

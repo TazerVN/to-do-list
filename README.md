@@ -18,6 +18,6 @@ Important Notes:
 
 Unimportant Note:
 
-I have come learnt a lot in the past 2 months. Although it was not easy, I enjoyed my time creating this website and applying new knowledge in the process. My initial goal was to learn and participate in enough project to get me into University or get a job. However, I really enjoy learning coding so much that it kinda consumes my whole life. I finally feel like my time was well-spent and I am motivated to continue doing this as long as I can. 
+I have (come) learnt a lot in the past 2 months. Although it was not easy, I enjoyed my time creating this website and applying new knowledge in the process. My initial goal was to learn and participate in enough project to get me into University or get a job. However, I really enjoy learning coding so much that it kinda consumes my whole life. I finally feel like my time was well-spent and I am motivated to continue doing this as long as I can. 
 
 To those who unsure about their future, trying something new might definitely help. That is all. See yall again some day! - Tuan 28/12/2024.
